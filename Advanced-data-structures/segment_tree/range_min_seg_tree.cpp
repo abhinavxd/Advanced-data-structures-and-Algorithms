@@ -33,6 +33,7 @@ const int N = 1e5;
 // then there will be N-1 internal nodes of tree
 // Total nodes required are N + (N-1) = 2N-1
 int tree[2*N];
+int tree1[2*N];
 
 void update(int low, int high, int pos, int index, int value) {
 	if (index < low || index > high)
@@ -58,6 +59,31 @@ int rangeMin(int qlow,int qhigh,int low,int high,int pos){
     return min(rangeMin(qlow, qhigh, low, mid, 2 * pos),
             rangeMin(qlow, qhigh, mid+1, high, 2 * pos+1));
 }
+
+int sum(int v, int tl, int tr, int l, int r) {
+    if (l > r) 
+        return 0;
+    if (l == tl && r == tr) {
+        return tree1[v];
+    }
+    int tm = (tl + (tr-tl)/2);
+    return sum(v*2, tl, tm, l, min(r, tm))
+           + sum(v*2+1, tm+1, tr, max(l, tm+1), r);
+}
+
+void buildTreeSum(int* arr, int v, int start, int end) {
+	if (start == end) {
+		tree1[v] = arr[start];
+		return;
+	}
+	// to avoid integer overflow
+	int mid = (start + (end-start)/2);
+	buildTreeSum(arr, 2*v, start, mid);
+	buildTreeSum(arr, 2*v+1, mid+1, end);
+	
+	tree1[v] = tree1[2*v] + tree1[2*v+1];
+}
+
 
 void buildTree(int* arr, int v, int start, int end) {
 	if (start == end) {
