@@ -35,14 +35,11 @@ signed main()
 
     int n, m;
     cin >> n >> m;
-    set<int> cities;
     for (int i = 0; i < m; i++)
     {
         int a, b, c;
         cin >> a >> b >> c;
         adj[a].push_back({b, c});
-        cities.insert(a);
-        cities.insert(b);
     }
 
     // queue
